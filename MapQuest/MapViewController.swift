@@ -74,6 +74,9 @@ class MapViewController: UIViewController {
     overlay.canReplaceMapContent = true
     mapView.add(overlay, level: .aboveLabels)
     tileRenderer = MKTileOverlayRenderer(tileOverlay: overlay)
+    
+    overlay.minimumZ = 13
+    overlay.maximumZ = 16
   }
 
   func setupLakeOverlay() {
