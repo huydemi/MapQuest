@@ -69,19 +69,10 @@ class MapViewController: UIViewController {
   }
 
   func setupTileRenderer() {
-    // 1
-    let template = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+    let overlay = AdventureMapOverlay()
     
-    // 2
-    let overlay = MKTileOverlay(urlTemplate: template)
-    
-    // 3
     overlay.canReplaceMapContent = true
-    
-    // 4
     mapView.add(overlay, level: .aboveLabels)
-    
-    //5
     tileRenderer = MKTileOverlayRenderer(tileOverlay: overlay)
   }
 

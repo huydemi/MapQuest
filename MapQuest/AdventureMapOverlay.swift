@@ -32,3 +32,10 @@ import Foundation
 import MapKit
 
 // Add AdventureMapOverlay class here:
+class AdventureMapOverlay: MKTileOverlay {
+  
+  override func url(forTilePath path: MKTileOverlayPath) -> URL {
+    let tileUrl = "https://tile.openstreetmap.org/\(path.z)/\(path.x)/\(path.y).png"
+    return URL(string: tileUrl)!
+  }
+}
