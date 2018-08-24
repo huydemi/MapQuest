@@ -35,7 +35,23 @@ import MapKit
 class AdventureMapOverlay: MKTileOverlay {
   
   override func url(forTilePath path: MKTileOverlayPath) -> URL {
-    let tileUrl = "https://tile.openstreetmap.org/\(path.z)/\(path.x)/\(path.y).png"
-    return URL(string: tileUrl)!
+    // 1
+    let tilePath = Bundle.main.url(
+      forResource: "\(path.y)",
+      withExtension: "png",
+      subdirectory: "tiles/\(path.z)/\(path.x)",
+      localization: nil)
+    
+    guard let tile = tilePath else {
+      
+      // 2
+      return Bundle.main.url(
+        forResource: "parchment",
+        withExtension: "png",
+        subdirectory: "tiles",
+        localization: nil)!
+    }
+    return tile
   }
+  
 }
