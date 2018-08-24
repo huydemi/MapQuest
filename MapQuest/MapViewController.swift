@@ -82,7 +82,16 @@ class MapViewController: UIViewController {
   }
 
   func setupLakeOverlay() {
-    // Add code here
+    let lake = MKPolygon(coordinates: &Game.shared.reservoir, count: Game.shared.reservoir.count)
+    mapView.add(lake)
+    
+    shimmerRenderer = ShimmerRenderer(overlay: lake)
+    shimmerRenderer.fillColor = #colorLiteral(red: 0.2431372549, green: 0.5803921569, blue: 0.9764705882, alpha: 1)
+    
+    Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+      self?.shimmerRenderer.updateLocations()
+      self?.shimmerRenderer.setNeedsDisplay()
+    }
   }
 
   @objc func gameUpdated(notification: Notification) {
@@ -103,7 +112,11 @@ class MapViewController: UIViewController {
 extension MapViewController: MKMapViewDelegate {
   // Add mapview delegate code here
   func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-    return tileRenderer
+    if overlay is AdventureMapOverlay {
+      return tileRenderer
+    } else {
+      return shimmerRenderer
+    }
   }
 
   func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
