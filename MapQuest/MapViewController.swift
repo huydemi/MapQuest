@@ -104,6 +104,25 @@ extension MapViewController: MKMapViewDelegate {
     return tileRenderer
   }
 
+  func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+    switch annotation {
+      
+    // 1
+    case let user as MKUserLocation:
+      
+      // 2
+      let view = mapView.dequeueReusableAnnotationView(withIdentifier: "user")
+        ?? MKAnnotationView(annotation: user, reuseIdentifier: "user")
+      
+      // 3
+      view.image = #imageLiteral(resourceName: "user")
+      return view
+      
+    default:
+      return nil
+    }
+  }
+  
 }
 
 // MARK: - Game UI
