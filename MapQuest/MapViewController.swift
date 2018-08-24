@@ -58,6 +58,8 @@ class MapViewController: UIViewController {
     Game.shared.delegate = self
 
     NotificationCenter.default.addObserver(self, selector: #selector(gameUpdated(notification:)), name: GameStateNotification, object: nil)
+    
+    mapView.delegate = self
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -67,7 +69,20 @@ class MapViewController: UIViewController {
   }
 
   func setupTileRenderer() {
-    // Add code here
+    // 1
+    let template = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+    
+    // 2
+    let overlay = MKTileOverlay(urlTemplate: template)
+    
+    // 3
+    overlay.canReplaceMapContent = true
+    
+    // 4
+    mapView.add(overlay, level: .aboveLabels)
+    
+    //5
+    tileRenderer = MKTileOverlayRenderer(tileOverlay: overlay)
   }
 
   func setupLakeOverlay() {
@@ -91,6 +106,9 @@ class MapViewController: UIViewController {
 // MARK: - MapView Delegate
 extension MapViewController: MKMapViewDelegate {
   // Add mapview delegate code here
+  func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+    return tileRenderer
+  }
 
 }
 
