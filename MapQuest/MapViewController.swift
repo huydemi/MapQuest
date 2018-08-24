@@ -60,6 +60,8 @@ class MapViewController: UIViewController {
     NotificationCenter.default.addObserver(self, selector: #selector(gameUpdated(notification:)), name: GameStateNotification, object: nil)
     
     mapView.delegate = self
+    
+    mapView.addAnnotations(Game.shared.warps)
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -106,16 +108,16 @@ extension MapViewController: MKMapViewDelegate {
 
   func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
     switch annotation {
-      
-    // 1
     case let user as MKUserLocation:
-      
-      // 2
       let view = mapView.dequeueReusableAnnotationView(withIdentifier: "user")
         ?? MKAnnotationView(annotation: user, reuseIdentifier: "user")
-      
-      // 3
       view.image = #imageLiteral(resourceName: "user")
+      return view
+      
+    case let warp as WarpZone:
+      let view = mapView.dequeueReusableAnnotationView(withIdentifier: WarpAnnotationView.identifier)
+        ?? WarpAnnotationView(annotation: warp, reuseIdentifier: WarpAnnotationView.identifier)
+      view.annotation = warp
       return view
       
     default:
